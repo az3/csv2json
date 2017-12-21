@@ -31,9 +31,18 @@ module CSV2JSON
             # build JSON snippet and append it to the result
             snippet = OrderedHash.new
             headers.each_index { |i| snippet[headers[i]] = self.convert(row[i]) }
-            result << snippet
+
+            if gemOptions[:lineDelimited] then
+                output << JSON.generate(snippet)
+                output << "\n"
+            else
+                result << snippet
+            end
         end
-        
+
+        if gemOptions[:lineDelimited] then
+            return
+        end
         if gemOptions[:pretty] == true then
             output << JSON.pretty_generate(result)
         else

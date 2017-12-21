@@ -17,6 +17,7 @@ module CSV2JSONRunner
     options.pretty = false
     options.headers = nil
     options.skipFirstRow = false
+    options.lineDelimited = false
 
     opts = OptionParser.new do |o|
         o.banner = USAGE
@@ -39,6 +40,10 @@ module CSV2JSONRunner
             if headers then
                 options.skipFirstRow = true
             end
+        end
+
+        o.on("-l", "--line-delimited", "Line delimited JSON output") do
+            options.lineDelimited = true
         end
 
         o.on("-H", "--headers HEADERS", "Supply list of headers, where no headers exist in the file, or where you're using -k to ignore them") do |headers|
@@ -78,7 +83,7 @@ module CSV2JSONRunner
     end
     
     # run the command
-    CSV2JSON.parse(IN, OUT, options.headers, {:col_sep => options.separator}, {:pretty => options.pretty, :skipFirstRow => options.skipFirstRow})
+    CSV2JSON.parse(IN, OUT, options.headers, {:col_sep => options.separator}, {:pretty => options.pretty, :skipFirstRow => options.skipFirstRow, :lineDelimited => options.lineDelimited})
     
     # leave in peace
     OUT.flush
